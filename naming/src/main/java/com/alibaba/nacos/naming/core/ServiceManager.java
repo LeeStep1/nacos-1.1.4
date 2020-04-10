@@ -188,12 +188,12 @@ public class ServiceManager implements RecordListener<Service> {
     }
 
     private class UpdatedServiceProcessor implements Runnable {
-        //get changed service from other server asynchronously
-        @Override
-        public void run() {
-            ServiceKey serviceKey = null;
+                //get changed service from other server asynchronously
+                @Override
+                public void run() {
+                    ServiceKey serviceKey = null;
 
-            try {
+                    try {
                 while (true) {
                     try {
                         serviceKey = toBeUpdatedServicesQueue.take();
