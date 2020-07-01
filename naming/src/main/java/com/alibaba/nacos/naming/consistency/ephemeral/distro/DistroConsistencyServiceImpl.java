@@ -145,8 +145,16 @@ public class DistroConsistencyServiceImpl implements EphemeralConsistencyService
         }
     }
 
+    /**
+     * 将实例集合放入dataStore
+     * @param key   key of data, this key should be globally unique
+     * @param value value of data
+     * @throws NacosException
+     */
     @Override
     public void put(String key, Record value) throws NacosException {
+
+        //把服务端的集群列表存入datastore
         onPut(key, value);
         taskDispatcher.addTask(key);
     }
@@ -162,9 +170,20 @@ public class DistroConsistencyServiceImpl implements EphemeralConsistencyService
         return dataStore.get(key);
     }
 
+    /**
+     * 将集群列表存入datastore
+     * @param key
+     * @param value
+     */
     public void onPut(String key, Record value) {
 
+        //先校验规则是否符合规范
         if (KeyBuilder.matchEphemeralInstanceListKey(key)) {
+
+            /**
+             * 1、先将集群列表 Instances 转换成datum
+             * 2、将datum存入 dataStore
+             */
             Datum<Instances> datum = new Datum<>();
             datum.value = (Instances) value;
             datum.key = key;
